@@ -1,10 +1,12 @@
+import urllib
+
 from flask import Flask, request, jsonify
 from flask_restful import Api, Resource
 import tensorflow_hub as hub
 import numpy as np
 import pandas as pd
 import cv2
-from skimage import io
+from PIL import Image
 
 app = Flask(__name__)
 api = Api(app)
@@ -26,11 +28,13 @@ class FoodRecognitionClass(Resource):
         try:
             m = hub.KerasLayer('model')
 
-            cake_url = imgPath
+            image_url = imgPath
             labelmap_url = "resources/aiy_food_V1_labelmap.csv"
             input_shape = (224, 224)
 
-            image = np.asarray(io.imread(cake_url), dtype="float")
+            img = Image.open(urllib.request.urlopen(image_url))
+
+            image = np.asarray(img, dtype="float")
             image = cv2.resize(image, dsize=input_shape, interpolation=cv2.INTER_CUBIC)
 
             # Scale values to [0, 1].
