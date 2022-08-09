@@ -1,6 +1,7 @@
 import urllib
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from flask_restful import Api, Resource
 import tensorflow_hub as hub
 import numpy as np
@@ -10,6 +11,7 @@ from PIL import Image
 
 app = Flask(__name__)
 api = Api(app)
+cors = CORS(app)
 
 def bad_request(message):
     response = jsonify({'message': message})
